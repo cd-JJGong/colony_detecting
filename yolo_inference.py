@@ -6,9 +6,13 @@ class yolo_13h:
     def __init__(self, fenlei_model_path, jishu_model_path):
         # Load the ONNX model
         self.model_fenlei: cv2.dnn.Net = cv2.dnn.readNetFromONNX(fenlei_model_path)
+        self.model_fenlei.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+        self.model_fenlei.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
         self.model_jishu: cv2.dnn.Net = cv2.dnn.readNetFromONNX(jishu_model_path)
+        self.model_jishu.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+        self.model_jishu.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
         self.class_indict_fenlei = {0: 'feike', 1: 'feilian', 2: 'jinpu'}
-        self.class_indict_jishu = {0: '1', 1: 2, 2: '3', 3: '4', 4: '5'}
+        self.class_indict_jishu = {0: '1', 1: '2', 2: '3', 3: '4', 4: '5'}
 
     def fenlei(self, image_path):
         # Read the input image
@@ -55,7 +59,7 @@ class yolo_13h:
 
 
 if __name__ == "__main__":
-    image_path = '/home/jjgong/colony_count/dataset/肺克/肺克2/230301302肺炎克雷伯菌3h/C00000147166_13_1162.jpg'
+    image_path = '/home/jjgong/colony_count/test/肺链_13h/C00000047432_6_1145.jpg'
     yolofenlei = yolo_13h("models/分类模型_三种菌_13h.onnx", "models/计数模型_三种菌.onnx")
     print(yolofenlei.fenlei(image_path))
     print(yolofenlei.jishu(image_path))
